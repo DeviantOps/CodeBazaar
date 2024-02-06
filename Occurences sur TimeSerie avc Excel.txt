@@ -1,0 +1,59 @@
+Pour une feuille Excel contenant des dates et heures en Colonne A et des chaines de caracteres en colonne B, 
+un code visualisant, par jour, le nombre d'occurences pour chaque chaine sous forme d'une courbe 
+dont la couleur est differente pour chaque chaine de caractere.
+
+
+Sub tracer_courbes()
+
+    ' Déclaration des variables
+    Dim plageDates As Range
+    Dim plageChaines As Range
+    Dim dateCourante As Date
+    Dim chaineCourante As String
+    Dim nbOccurences As Integer
+    Dim dictNbOccurences As Object
+    Dim chartObj As ChartObject
+    Dim chartSerie As Series
+    Dim i As Integer
+    
+    ' Spécification des plages de données
+    Set plageDates = Range("A2:A" & Range("A" & Rows.Count).End(xlUp).Row)
+    Set plageChaines = Range("B2:B" & Range("B" & Rows.Count).End(xlUp).Row)
+    
+    ' Initialisation du dictionnaire des nombres d'occurrences
+    Set dictNbOccurences = CreateObject("Scripting.Dictionary")
+    
+    ' Itération sur chaque jour
+    For Each dateCourante In plageDates
+    
+        ' Initialisation des nombres d'occurrences à 0 pour chaque chaine
+        For Each chaineCourante In plageChaines
+            dictNbOccurences(chaineCourante) = 0
+        Next chaineCourante
+        
+        ' Comptage des occurrences pour chaque chaine
+        For i = 1 To plageDates.Rows.Count
+            If plageDates.Cells(i, 1).Value = dateCourante Then
+                chaineCourante = plageChaines.Cells(i, 1).Value
+                dictNbOccurences(chaineCourante) = dictNbOccurences(chaineCourante) + 1
+            End If
+        Next i
+        
+        ' Création de la courbe pour chaque chaine
+        Set chartObj = ActiveSheet.ChartObjects.Add(Left:=500, Width:=400, Top:=75 + (dateCourante - plageDates.Cells(1, 1).Value) * 15, Height:=10)
+        chartObj.Chart.ChartType = xlLineMarkers
+        For Each chaineCourante In dictNbOccurences.Keys
+            Set chartSerie = chartObj.Chart.SeriesCollection.NewSeries
+            chartSerie.Values = Array(dictNbOccurences(chaineCourante))
+            chartSerie.Name = chaineCourante
+            chartSerie.Format.Line.ForeColor.RGB = RGB(255, 0, 0) ' Modifier la couleur ici
+        Next chaineCourante
+        
+    Next dateCourante
+    
+End Sub
+
+Ce code utilise un dictionnaire pour compter le nombre d'occurrences de chaque chaine pour chaque jour, puis crée une courbe pour chaque chaine avec la couleur spécifiée. 
+Les courbes sont positionnées en fonction de la date, avec une différence de 15 points entre chaque jour.
+
+Pour utiliser ce code, vous devez activer les références à la bibliothèque "Microsoft Scripting Runtime" dans les outils de références VBA.
