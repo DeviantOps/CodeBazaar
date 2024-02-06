@@ -1,0 +1,111 @@
+% Charger le fichier CSV
+data = csvread('votre_fichier.csv');
+
+% Supprimer la première colonne contenant les dates et heures car l'algorithme Apriori traite uniquement des valeurs numériques
+data(:, 1) = [];
+
+% Définir les seuils de support minimum et de confiance minimum
+minSup = 0.1;
+minConf = 0.7;
+
+% Fonction pour générer les itemsets fréquents
+function frequent_itemsets = apriori(data, minSup)
+    % Générer tous les itemsets de taille 1
+    items = unique(data);
+    frequent_itemsets = cell(length(items), 1);
+    for i = 1:length(items)
+        frequent_itemsets{i} = items(i);
+    end
+
+    % Calculer le support des itemsets de taille 1
+    support = zeros(length(items), 1);
+    for i = 1:length(items)
+        support(i) = sum(ismember(data, items(i)));
+    end
+
+    % Filtrer les itemsets de taille 1 en fonction du support minimum
+    frequent_itemsets = frequent_itemsets(support >= minSup);
+
+    k = 2;
+    while ~isempty(frequent_itemsets)
+        % Générer les candidats pour les itemsets de taille k
+        candidates = generate_candidates(frequent_itemsets, k);
+
+        % Calculer le support des candidats
+        support = calculate_support(data, candidates);
+
+        % Filtrer les candidats en fonction du support minimum
+        frequent_itemsets = candidates(support >= minSup);
+
+        k = k + 1;
+    end
+end
+
+% Fonction pour générer les candidats pour les itemsets de taille k
+function candidates = generate_candidates(frequent_itemsets, k)
+    candidates = {};
+    num_itemsets = length(frequent_itemsets);
+    for i = 1:num_itemsets
+        for j = i+1:num_itemsets
+            if isequal(frequent_itemsets{i}(1:k-2), frequent_itemsets{j}(1:k-2))
+                candidate = union(frequent_itemsets{i}, frequent_itemsets{j});
+                if length(candidate) == k
+                    candidates = [candidates; candidate];
+                end
+            else
+                break;
+            end
+        end
+    end
+end
+
+% Fonction pour calculer le support des candidats
+function support = calculate_support(data, candidates)
+    num_candidates = length(candidates);
+    support = zeros(num_candidates, 1);
+    for i = 1:num_candidates
+        support(i) = sum(all(ismember(data, candidates{i}), 2));
+    end
+end
+
+% Fonction pour générer les règles d'association à partir des itemsets fréquents
+function rules = generate_rules(frequent_itemsets, data, minConf)
+    rules = {};
+    num_itemsets = length(frequent_itemsets);
+    for i = 1:num_itemsets
+        itemset = frequent_itemsets{i};
+        if length(itemset) > 1
+            num_subsets = length(itemset) - 1;
+            for j = 1:num_subsets
+                subsets = nchoosek(itemset, j);
+                num_subsets = size(subsets, 1);
+                for k = 1:num_subsets
+                    antecedent = subsets(k, :);
+                    consequent = setdiff(itemset, antecedent);
+                    confidence = calculate_confidence(antecedent, consequent, data);
+                    if confidence >= minConf
+                        rules = [rules; struct('antecedent', antecedent, 'consequent', consequent, 'confidence', confidence)];
+                    end
+                end
+            end
+        end
+    end
+end
+
+% Fonction pour calculer la confiance d'une règle d'association
+function confidence = calculate_confidence(antecedent, consequent, data)
+    num_antecedent = sum(all(ismember(data, antecedent), 2));
+    num_rule = sum(all(ismember(data, [antecedent, consequent]), 2));
+    confidence = num_rule / num_antecedent;
+end
+
+% Générer les itemsets fréquents
+frequent_itemsets = apriori(data, minSup);
+
+% Générer les règles d'association
+rules = generate_rules(frequent_itemsets, data, minConf);
+
+% Afficher les règles d'association
+for i = 1:length(rules)
+    fprintf('Rule %d: If %s then %s (Confidence: %.2f)\n', i, mat2str(rules(i).antecedent), mat2str(rules(i).consequent), rules(i).confidence);
+end
