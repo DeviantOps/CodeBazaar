@@ -1,0 +1,39 @@
+// Détection de macros malveillantes dans les fichiers Office
+rule Office_Malicious_Macros {
+    meta:
+        description = "Détection de macros malveillantes dans les fichiers Office"
+        author = "Nom de l'auteur"
+        reference = "Référence de la règle"
+    strings:
+        $macro1 = { 4D 61 63 72 6F 73 20 6D 61 6B 72 6F 73 00 } // "Macros makros"
+        $macro2 = { 50 72 69 76 61 74 65 20 53 75 62 20 46 6C 6F 77 20 43 68 61 72 61 63 74 65 72 73 00 } // "Private Sub Follow_Chart()"
+
+    condition:
+        (uint16(0) == 0x504B and (filesize < 5MB) and ($macro1 or $macro2))
+}
+
+// Détection de fichiers contenant des objets OLE malveillants
+rule Office_Malicious_OLE {
+    meta:
+        description = "Détection de fichiers contenant des objets OLE malveillants"
+        author = "Nom de l'auteur"
+        reference = "Référence de la règle"
+    strings:
+        $ole1 = { 00 D0 CF 11 E0 A1 B1 1A E1 00 00 00 00 00 00 00 } // En-tête OLE
+        $ole2 = { BE BE 07 10 02 00 00 00 } // Taille de l'objet OLE
+    condition:
+        (uint16(0) == 0x504B and (filesize < 5MB) and ($ole1 or $ole2))
+}
+
+// Détection de fichiers contenant des scripts PowerShell malveillants
+rule Office_Malicious_PowerShell {
+    meta:
+        description = "Détection de fichiers contenant des scripts PowerShell malveillants"
+        author = "Nom de l'auteur"
+        reference = "Référence de la règle"
+    strings:
+        $ps1 = { 24 70 61 74 68 20 3D } // "$path ="
+        $ps2 = { 69 45 78 65 63 } // "iExec"
+    condition:
+        (uint16(0) == 0x504B and (filesize < 5MB) and ($ps1 or $ps2))
+}
