@@ -1,0 +1,49 @@
+Sub CreerCourbes()
+    Dim rngDates As Range, rngChaines As Range
+    Dim dictChaines As Object
+    Dim wsGraph As Worksheet
+    Dim chtGraph As ChartObject
+    Dim serData As Series
+    Dim i As Integer, j As Integer, k As Integer
+    Dim dtDate As Date, strChaine As String
+    
+    'Récupérer la plage de dates et la plage de chaînes de caractères
+    Set rngDates = Range("A2:A" & Cells(Rows.Count, "A").End(xlUp).Row)
+    Set rngChaines = Range("B2:B" & Cells(Rows.Count, "B").End(xlUp).Row)
+    
+    'Créer un dictionnaire pour stocker le nombre d'occurrences de chaque chaîne de caractères par jour
+    Set dictChaines = CreateObject("Scripting.Dictionary")
+    
+    'Boucler sur toutes les cellules de la plage de dates et de chaînes de caractères
+    For i = 1 To rngDates.Cells.Count
+        'Extraire la date et la chaîne de caractères correspondantes
+        dtDate = Int(rngDates.Cells(i).Value)
+        strChaine = rngChaines.Cells(i).Value
+        
+        'Vérifier si cette combinaison date/chaîne de caractères existe déjà dans le dictionnaire
+        If dictChaines.Exists(dtDate & "|" & strChaine) Then
+            'Si oui, incrémenter le compteur correspondant
+            dictChaines(dtDate & "|" & strChaine) = dictChaines(dtDate & "|" & strChaine) + 1
+        Else
+            'Sinon, ajouter une nouvelle entrée au dictionnaire avec un compteur initialisé à 1
+            dictChaines.Add dtDate & "|" & strChaine, 1
+        End If
+    Next i
+    
+    'Créer une nouvelle feuille de calcul pour le graphique
+    Set wsGraph = Worksheets.Add
+    
+    'Créer un graphique de type courbe (xy)
+    Set chtGraph = wsGraph.Shapes.AddChart.Chart
+    chtGraph.ChartType = xlXYScatterLinesNoMarkers
+    
+    'Boucler sur toutes les chaînes de caractères distinctes dans le dictionnaire
+    For j = 0 To dictChaines.Count - 1 Step 5
+        'Ajouter une nouvelle série de données au graphique pour chaque chaîne de caractères
+        Set serData = chtGraph.SeriesCollection.NewSeries
+        
+        'Extraire la chaîne de caractères et les données correspondantes à partir du dictionnaire
+        strChaine = Split(dictChaines.Keys(j), "|")(1)
+        serData.Name = strChaine
+        serData.Values = Array(dictChaines.Items(j), dictChaines.Items(j + 1), dictChaines.Items(j + 2), dictChaines.Items(j + 3), dictChaines.Items(j + 4))
+        serData.XValues = Array(Split(dictChaines.Keys(j), "|")(0), Split(dictChaines.Keys(j + 1), "|")(0), Split(dictChaines
