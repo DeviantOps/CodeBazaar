@@ -1,0 +1,44 @@
+Sub DetectAnomalies()
+    'Définition des variables
+    Dim ws As Worksheet
+    Dim rng As Range
+    Dim i As Integer, j As Integer
+    Dim arr() As Variant
+    Dim q1 As Double, q3 As Double
+    Dim iqr As Double, lower_bound As Double, upper_bound As Double
+    
+    'Définition de la feuille de calcul et de la plage de données
+    Set ws = ActiveSheet
+    Set rng = ws.UsedRange
+    
+    'Récupération des données dans un tableau
+    arr = rng.Value
+    
+    'Boucle sur chaque colonne de données
+    For i = 2 To UBound(arr, 2)
+        
+        'Calcul des quartiles et de l'intervalle interquartile
+        q1 = WorksheetFunction.Quartile(arr, 1, i)
+        q3 = WorksheetFunction.Quartile(arr, 3, i)
+        iqr = q3 - q1
+        
+        'Calcul des bornes inférieure et supérieure pour les valeurs aberrantes
+        lower_bound = q1 - 1.5 * iqr
+        upper_bound = q3 + 1.5 * iqr
+        
+        'Boucle sur chaque observation dans la colonne
+        For j = 2 To UBound(arr, 1)
+            
+            'Vérification si la valeur est une anomalie
+            If arr(j, i) < lower_bound Or arr(j, i) > upper_bound Then
+                
+                'Mise en évidence de la cellule contenant l'anomalie
+                ws.Cells(j, i).Interior.ColorIndex = 3
+                
+            End If
+            
+        Next j
+        
+    Next i
+    
+End Sub
