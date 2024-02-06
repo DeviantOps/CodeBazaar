@@ -1,0 +1,37 @@
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - /user1/BlackLists/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: Docker@2
+    displayName: 'Create Docker Container'
+    inputs:
+      containerRegistry: 'DockerHub'
+      repository: 'jupyter/datascience-notebook'
+      command: 'run -d -p 8888:8888'
+      detach: true
+      ports: '8888:8888'
+
+  - task: Docker@2
+    displayName: 'Start Docker Container'
+    inputs:
+      containerRegistry: 'DockerHub'
+      containerType: 'container'
+      action: 'start'
+      containerName: 'your-container-name'
+
+  - script: 'git clone https://github.com/user1/BlackLists.git'
+    displayName: 'Clone BlackLists repository'
+
+  - script: 'git clone https://github.com/user2/LDLN.git'
+    displayName: 'Clone LDLN repository'
+
+  - script: 'python LDLN/myscript.py'
+    displayName: 'Run Python script'
