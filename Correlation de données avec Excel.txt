@@ -1,0 +1,81 @@
+Voici un exemple de code VBA qui utilise les fonctions intégrées d'Excel pour calculer les corrélations entre les colonnes de données et mettre en évidence les résultats.
+
+
+Sub CalculerCorrelations()
+
+    'Définir la plage de données
+    Dim PlageDonnees As Range
+    Set PlageDonnees = Range("A1:D100")
+    
+    'Calculer les corrélations
+    Dim CorrBC As Double
+    Dim CorrBD As Double
+    Dim CorrCD As Double
+    CorrBC = WorksheetFunction.Correl(PlageDonnees.Columns("B"), PlageDonnees.Columns("C"))
+    CorrBD = WorksheetFunction.Correl(PlageDonnees.Columns("B"), PlageDonnees.Columns("D"))
+    CorrCD = WorksheetFunction.Correl(PlageDonnees.Columns("C"), PlageDonnees.Columns("D"))
+    
+    'Afficher les résultats
+    MsgBox "Corrélation entre colonnes B et C: " & CorrBC & vbNewLine _
+         & "Corrélation entre colonnes B et D: " & CorrBD & vbNewLine _
+         & "Corrélation entre colonnes C et D: " & CorrCD
+    
+End Sub
+
+Ce code suppose que les données sont situées dans les cellules A1:D100 de la feuille active. Vous pouvez ajuster la plage de données en modifiant la ligne Set PlageDonnees = Range("A1:D100").
+
+Le code calcule ensuite les corrélations entre les colonnes B, C et D en utilisant la fonction Correl d'Excel. Les résultats sont stockés dans les variables CorrBC, CorrBD et CorrCD.
+
+Enfin, le code affiche les résultats dans une boîte de dialogue en utilisant la fonction MsgBox. Vous pouvez modifier la façon dont les résultats sont affichés en modifiant cette ligne de code.
+
+Ce code peut être amélioré en ajoutant des fonctionnalités supplémentaires, telles que l'affichage d'un graphique de dispersion pour visualiser la corrélation entre les données, ou en automatisant le processus de mise en évidence des corrélations en surlignant les cellules avec une mise en forme conditionnelle.
+
+Affichage de ce graphique de dispersion:
+
+Voici un exemple de code VBA qui utilise les données de la feuille Excel et crée un graphique de dispersion pour visualiser la corrélation entre les colonnes B et C. Vous pouvez adapter le code en fonction de vos besoins pour créer des graphiques de dispersion pour d'autres colonnes de données.
+
+
+Sub CreerGraphiqueDispersion()
+
+    'Définir la plage de données
+    Dim PlageDonnees As Range
+    Set PlageDonnees = Range("A1:C100")
+    
+    'Créer un objet Chart
+    Dim Graphique As Chart
+    Set Graphique = Charts.Add
+    
+    'Définir le type de graphique et le titre
+    Graphique.ChartType = xlXYScatter
+    Graphique.HasTitle = True
+    Graphique.ChartTitle.Text = "Corrélation entre colonnes B et C"
+    
+    'Ajouter les séries de données
+    Dim SerieB As Series
+    Dim SerieC As Series
+    Set SerieB = Graphique.SeriesCollection.NewSeries
+    Set SerieC = Graphique.SeriesCollection.NewSeries
+    SerieB.Values = PlageDonnees.Columns("B")
+    SerieC.Values = PlageDonnees.Columns("C")
+    SerieB.XValues = PlageDonnees.Columns("A")
+    SerieC.XValues = PlageDonnees.Columns("A")
+    
+    'Mettre en forme le graphique
+    Graphique.Axes(xlCategory).HasTitle = True
+    Graphique.Axes(xlCategory).AxisTitle.Text = "Date et heure"
+    Graphique.Axes(xlValue).HasTitle = True
+    Graphique.Axes(xlValue).AxisTitle.Text = "Valeurs"
+    
+    'Ajuster la taille du graphique
+    Graphique.Parent.Width = 600
+    Graphique.Parent.Height = 400
+    
+End Sub
+
+Ce code crée un graphique de dispersion avec les données de la colonne B sur l'axe des y et les données de la colonne C sur l'axe des x. Le titre du graphique est "Corrélation entre colonnes B et C" et les axes sont étiquetés avec "Date et heure" et "Valeurs". Vous pouvez modifier ces étiquettes en modifiant les lignes de code appropriées.
+
+Le code ajoute également des séries de données pour les colonnes B et C, en utilisant la méthode NewSeries de l'objet SeriesCollection. Les séries sont ensuite associées aux plages de données appropriées en utilisant les propriétés Values et XValues.
+
+Enfin, le code met en forme le graphique en ajoutant des titres aux axes, en ajustant la taille du graphique et en modifiant d'autres propriétés selon vos besoins.
+
+Pour que ce code fonctionne, vous devez avoir activé la référence à l'objet "Microsoft Excel 16.0 Object Library" dans les outils de références VBA. Vous pouvez le faire en allant dans le menu Outils > Références et en cochant la case correspondante.
