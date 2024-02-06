@@ -1,0 +1,47 @@
+% Charger le fichier CSV
+data = csvread('votre_fichier.csv');
+
+% Supprimer la première colonne contenant les dates et heures si nécessaire
+% data(:, 1) = [];
+
+% Normaliser les données
+normalized_data = zscore(data);
+
+% Définir le nombre de plus proches voisins (k)
+k = 5;
+
+% Fonction pour calculer la distance euclidienne entre deux points
+function distance = euclidean_distance(point1, point2)
+    distance = sqrt(sum((point1 - point2) .^ 2));
+end
+
+% Fonction pour trouver les k plus proches voisins d'un point donné
+function neighbors = find_neighbors(data, query_point, k)
+    distances = zeros(size(data, 1), 1);
+    for i = 1:size(data, 1)
+        distances(i) = euclidean_distance(data(i, :), query_point);
+    end
+    [~, sorted_indices] = sort(distances);
+    neighbors = sorted_indices(1:k);
+end
+
+% Fonction pour détecter les anomalies
+function anomalies = detect_anomalies(data, k)
+    anomalies = false(size(data, 1), 1);
+    for i = 1:size(data, 1)
+        neighbors = find_neighbors(data, data(i, :), k);
+        % Calculer la distance moyenne des k plus proches voisins
+        avg_distance = mean(sqrt(sum((data(neighbors, :) - data(i, :)) .^ 2, 2)));
+        % Vérifier si la distance de l'instance actuelle est significativement plus grande que la moyenne
+        if euclidean_distance(data(i, :), mean(data)) > 2 * avg_distance
+            anomalies(i) = true;
+        end
+    end
+end
+
+% Détecter les anomalies dans les données
+anomalies = detect_anomalies(normalized_data, k);
+
+% Afficher les indices des instances anormales
+fprintf('Indices des instances anormales : \n');
+disp(find(anomalies));
