@@ -1,0 +1,43 @@
+Pour mettre en place des buckets (ou équivalents) dans les services de cloud AWS, GCP et Azure tout en maintenant des Fully Qualified Domain Names (FQDN) constants pour accéder aux fichiers, vous pouvez suivre les étapes suivantes pour chaque fournisseur de cloud :
+
+AWS (Amazon Web Services) - S3 (Simple Storage Service) :
+
+    Connectez-vous à la console AWS.
+    Accédez au service S3.
+    Cliquez sur "Create bucket" pour créer un nouveau bucket.
+    Choisissez un nom unique pour votre bucket. Les noms de buckets S3 sont globalement uniques, donc vous devrez peut-être expérimenter avec différents noms.
+    Assurez-vous de choisir une région pour votre bucket.
+    Dans les options de configuration du bucket, recherchez l'option "Static website hosting" ou "Static website hosting properties".
+    Activez l'hébergement de site statique et spécifiez l'index et la page d'erreur personnalisés si nécessaire.
+    Configurez les autorisations d'accès appropriées pour les objets dans votre bucket.
+    Une fois le bucket créé, vous pouvez accéder aux fichiers à l'aide du FQDN suivant :
+
+=> http://<nom-du-bucket>.s3-website-<region>.amazonaws.com.
+
+GCP (Google Cloud Platform) - Cloud Storage :
+
+    Connectez-vous à la console Google Cloud.
+    Accédez au service Cloud Storage.
+    Cliquez sur "Create bucket" pour créer un nouveau bucket.
+    Choisissez un nom unique pour votre bucket. Les noms de buckets Cloud Storage doivent être globalement uniques.
+    Sélectionnez une région pour votre bucket.
+    Dans les options de configuration du bucket, recherchez l'onglet "Website" ou "Static website".
+    Activez l'hébergement du site statique et spécifiez l'index et la page d'erreur personnalisés si nécessaire.
+    Configurez les autorisations d'accès appropriées pour les objets dans votre bucket.
+    Une fois le bucket créé, vous pouvez accéder aux fichiers à l'aide du FQDN suivant : 
+
+=> http://storage.googleapis.com/<nom-du-bucket>.
+
+Azure - Blob Storage :
+
+    Connectez-vous au portail Azure.
+    Accédez au service Azure Storage.
+    Créez un nouveau compte de stockage ou utilisez un compte de stockage existant.
+    Créez un conteneur de blob pour stocker vos fichiers.
+    Choisissez un nom unique pour votre conteneur de blob.
+    Dans les paramètres du conteneur de blob, recherchez l'option "Static website".
+    Activez l'hébergement du site statique et spécifiez l'index et la page d'erreur personnalisés si nécessaire.
+    Configurez les autorisations d'accès appropriées pour les objets dans votre conteneur de blob.
+    Une fois le conteneur de blob créé, vous pouvez accéder aux fichiers à l'aide du FQDN suivant :
+
+=> http://<nom-du-compte-de-stockage>.blob.core.windows.net/<nom-du-conteneur-de-blob>.
