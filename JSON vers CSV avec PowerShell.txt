@@ -1,0 +1,2 @@
+$json = Get-Content -Raw -Path "chemin\vers\fichier.json" | ConvertFrom-Json
+$json | Export-Csv -Path "chemin\vers\fichier.csv" -NoTypeInformation
