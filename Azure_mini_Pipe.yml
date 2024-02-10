@@ -1,0 +1,28 @@
+# Nom du pipeline
+name: Pipeline de déploiement
+
+# Déclencheur du pipeline
+trigger:
+  branches:
+    include:
+      - main
+      - development
+
+# Étapes du pipeline
+jobs:
+  - job: Build
+    displayName: 'Build et test'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - script: echo "Exécution des étapes de build et de test"
+        displayName: 'Build et test'
+
+  - job: Deploy
+    displayName: 'Déploiement'
+    dependsOn: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - script: echo "Exécution des étapes de déploiement"
+        displayName: 'Déploiement'
