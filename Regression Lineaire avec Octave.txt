@@ -13,3 +13,11 @@ function [theta, J_history] = gradientDescent(X, y, theta, alpha, num_iters)
   end
 
 endfunction
+
+function J = computeCost(X, y, theta)
+
+  m = length(y);
+
+  J = 1 / (2 * m) * sum((X * theta - y).^2);
+
+endfunction
