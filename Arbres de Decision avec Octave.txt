@@ -1,0 +1,77 @@
+function tree = id3(X, y, attribute_names)
+    % Fonction récursive pour construire l'arbre de décision
+    % Entrées :
+    %   X : Matrice des données d'entrée (n_samples, n_features)
+    %   y : Vecteur des étiquettes de classe (n_samples)
+    %   attribute_names : Noms des attributs
+    % Sortie :
+    %   tree : Arbre de décision
+
+    % Vérifier si tous les exemples ont la même étiquette
+    if all(y == y(1))
+        tree.op = '';
+        tree.kids = {};
+        tree.class = y(1);
+        return;
+    end
+    
+    % Sélectionner l'attribut avec la plus grande information gain
+    n_attributes = size(X, 2);
+    gain = zeros(1, n_attributes);
+    for i = 1:n_attributes
+        gain(i) = calculate_information_gain(X(:, i), y);
+    end
+    [~, best_attribute] = max(gain);
+    
+    % Créer un noeud pour cet attribut
+    tree.op = attribute_names{best_attribute};
+    tree.kids = {};
+    
+    % Séparer les données en fonction des valeurs de l'attribut sélectionné
+    unique_values = unique(X(:, best_attribute));
+    for i = 1:length(unique_values)
+        value = unique_values(i);
+        indices = find(X(:, best_attribute) == value);
+        X_subset = X(indices, :);
+        y_subset = y(indices);
+        if isempty(X_subset)
+            % Si la sous-matrice est vide, attribuer la classe majoritaire
+            tree.kids{i}.op = '';
+            tree.kids{i}.kids = {};
+            tree.kids{i}.class = mode(y);
+        else
+            % Appeler récursivement l'algorithme ID3
+            tree.kids{i} = id3(X_subset, y_subset, attribute_names);
+        end
+    end
+end
+
+function entropy = calculate_entropy(y)
+    % Fonction pour calculer l'entropie
+    p = histc(y, unique(y)) / numel(y);
+    entropy = -sum(p .* log2(p + (p == 0)));
+end
+
+function information_gain = calculate_information_gain(attribute_values, y)
+    % Fonction pour calculer le gain d'information
+    n_samples = length(y);
+    entropy_parent = calculate_entropy(y);
+    unique_values = unique(attribute_values);
+    entropy_children = 0;
+    for i = 1:length(unique_values)
+        value = unique_values(i);
+        indices = find(attribute_values == value);
+        y_subset = y(indices);
+        entropy_children = entropy_children + (length(y_subset) / n_samples) * calculate_entropy(y_subset);
+    end
+    information_gain = entropy_parent - entropy_children;
+end
+
+% Cette implémentation suppose que les données sont représentées dans une matrice X où chaque ligne représente un exemple
+% et chaque colonne représente un attribut, et un vecteur y contenant les étiquettes de classe correspondantes.
+% Les attribute_names sont les noms des attributs.
+% Utilisation:
+% X = [...]; % Vos données d'entraînement
+% y = [...]; % Les étiquettes de classe correspondantes
+% attribute_names = {...}; % Les noms des attributs
+% tree = id3(X, y, attribute_names);
