@@ -1,0 +1,57 @@
+function [centroids, idx] = runkMeans(X, initial_centroids, max_iters)
+
+  K = size(initial_centroids, 1);
+
+  centroids = initial_centroids;
+
+  for i=1:max_iters
+
+      idx = findClosestCentroids(X, centroids);
+
+      centroids = computeCentroids(X, idx, K);
+
+  end
+
+endfunction
+
+ 
+
+function idx = findClosestCentroids(X, centroids)
+
+  K = size(centroids, 1);
+
+  m = size(X, 1);
+
+  idx = zeros(m, 1);
+
+  for i=1:m
+
+      dist = zeros(K, 1);
+
+      for j=1:K
+
+          dist(j) = sum((X(i,:) - centroids(j,:)).^2);
+
+      end
+
+      [~, idx(i)] = min(dist);
+
+  end
+
+endfunction
+
+ 
+
+function centroids = computeCentroids(X, idx, K)
+
+  [m n] = size(X);
+
+  centroids = zeros(K, n);
+
+  for i=1:K
+
+      centroids(i,:) = mean(X(idx==i,:));
+
+  end
+
+endfunction
