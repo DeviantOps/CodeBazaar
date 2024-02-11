@@ -1,0 +1,45 @@
+/* Définir la fonction générant la surface de révolution de la cloche */
+f(u) := u^2;
+
+/* Définir la densité et la vitesse du son */
+rho : 1.21; /* densité de l'air à température ambiante */
+c : 343; /* vitesse du son dans l'air à température ambiante */
+
+/* Définir les paramètres de la cloche */
+L : 0.3; /* longueur de la cloche */
+R : 0.1; /* rayon de la cloche */
+
+/* Calculer la fréquence de résonance */
+omega : solve('rho*L*integrate(f(u)^2,u,0,R)*omega^2 - c^2*integrate((diff(f(u),u))^2*(R^2-f(u)^2),u,0,R), omega);
+freq : float(omega/(2*%pi));
+
+/* Afficher la fréquence de résonance */
+print("La fréquence de résonance de la cloche en forme de parabole est de ", freq, " Hz.");
+
+/*
+
+Cloche en forme de sablier : courbe en forme de S ou une courbe qui s'élargit en forme de sablier.
+r = a + (b-a) * cos(t)
+où a et b sont les rayons de la cloche à son extrémité supérieure et inférieure, et t est un paramètre de 0 à π qui décrit l'angle de rotation autour de l'axe central de la cloche.
+
+Cloche en forme de vase : courbe qui s'élargit vers le haut et qui se resserre vers le bas.
+r = a * exp(-b*t)
+où a et b sont des constantes positives, et t est le paramètre d'angle de rotation.
+
+Cloche en forme de poire :
+r = a + (b-a) * (1 - exp(-c*t))
+où a et b sont les rayons de la cloche à son extrémité supérieure et inférieure, et c est une constante positive.
+
+Cloche en forme de cône :
+r = a + (b-a) * t
+où a et b sont les rayons de la cloche à son extrémité supérieure et inférieure, et t est le paramètre d'angle de rotation.
+
+Cloche en forme de cylindre : cercle
+r = a
+où a est le rayon de la cloche.
+
+Cloche en forme de dôme : parabole ou de demi-ellipse. 
+r = a * sqrt(1 - (t/b)^2)
+où a et b sont des constantes positives, et t est le paramètre d'angle de rotation.
+
+*/
