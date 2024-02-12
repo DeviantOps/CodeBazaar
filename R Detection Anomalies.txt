@@ -1,0 +1,19 @@
+# R propose plusieurs méthodes de détection d'anomalies. 
+# L'une des méthodes couramment utilisées est l'utilisation de l'algorithme Isolation Forest.
+
+# Installer la librairie 'anomalize'
+install.packages("anomalize")
+
+# Charger la librairie
+library(anomalize)
+# Soit un dataframe appellé 'data' 
+# On veut détecter les anomalies dans les colonnes E_x, E_y, E_z, B_x, B_y, B_z. on peutz utiliser l'algorithme Isolation Forest :
+
+# Sélectionner les colonnes pertinentes
+data_anomaly <- data[, c("E_x", "E_y", "E_z", "B_x", "B_y", "B_z")]
+
+# Appliquer la détection d'anomalies avec l'algorithme Isolation Forest
+anomaly_result <- anomalize(data_anomaly, method = "isolation_forest")
+
+# Afficher les résultats
+plot(anomaly_result)
