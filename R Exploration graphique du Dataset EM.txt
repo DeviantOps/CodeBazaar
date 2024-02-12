@@ -1,0 +1,47 @@
+# Installer la librairie 'rgl'
+# install.packages("rgl")
+
+# Charger la librairie
+library(rgl)
+
+# Soit un dataframe appelé 'data'
+# On bidouille sur l'intensité de E en fonction de (x,y,z)
+
+# Créer un graphique 3D
+plot3d(data$x, data$y, data$z, col=data$E, size=2)
+
+# Ajouter des annotations
+title3d(main="Visualisation 3D de l'intensité du champ E")
+
+# Afficher le graphique
+rglwidget()
+
+# Aprés la visualisation statique, on s'interesse à l'évolution dans le temps du champs Electique.
+
+# Installer la librairie 'manipulate'
+# install.packages("manipulate")
+
+# Chargez les librairies
+library(rgl)
+library(manipulate)
+
+# Soit le dataframe appelé 'data'
+# Supposons que les colonnes pour x, y, z, E et le temps sont "x", "y", "z", "E", "temps"
+
+# Créer une fonction pour afficher la surface en fonction du temps
+plot_surface <- function(time_index) {
+  # Sélectionner les données pour un temps donné
+  data_subset <- subset(data, temps == time_index)
+ 
+  # Créer un graphique 3D
+  plot3d(data_subset$x, data_subset$y, data_subset$z, col=data_subset$E, size=2)
+ 
+  # Ajouter des annotations
+  title3d(main=paste("Surface à t =", time_index))
+}
+
+# Créer une animation en utilisant la fonction manipulate
+manipulate(
+  plot_surface(time_index),
+  time_index = slider(1, max(data$temps), step = 1, initial = 1)
+)
