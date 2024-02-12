@@ -1,0 +1,63 @@
+# Definition du chemin
+chemin_fichier <- "votre_chemin/le_fichier.csv"
+
+# Charger le fichier CSV dans un dataframe
+data <- read.csv(chemin_fichier)
+Afficher les premières lignes pour vérification :
+
+# Afficher les premières lignes du dataframe
+head(data)
+Calculer les corrélations :
+
+# Calculer les corrélations entre les colonnes
+correlations <- cor(data)
+Afficher la matrice de corrélations :
+
+# Afficher la matrice de corrélations
+print(correlations)
+
+# Installer la librairie 'corrplot' si elle n'est pas déjà installée
+install.packages("corrplot")
+
+# Charger la librairie
+library(corrplot)
+
+# Afficher une heatmap de la matrice de corrélation
+corrplot(correlations, method="color")
+
+#
+# Pour explorer les statistiques descriptives et comprendre les données.
+#
+
+summary(data): Affiche un résumé statistique de chaque variable dans le dataframe.
+describe(data): Fournit des statistiques descriptives plus détaillées.
+
+shapiro.test(variable): Effectue un test de normalité de Shapiro.
+
+#Tests de tendance centrale :
+mean(variable): Calcule la moyenne d'une variable.
+median(variable): Calcule la médiane d'une variable.
+
+#Dispersion des données :
+sd(variable): Calcule l'écart-type d'une variable.
+var(variable): Calcule la variance d'une variable.
+
+#Tests de corrélation :
+cor.test(x, y): Effectue un test de corrélation entre deux variables.
+cor(data): Calcule la matrice de corrélation pour toutes les paires de variables dans le dataframe.
+
+#Régression linéaire :
+lm(Y ~ X, data=data): Effectue une régression linéaire simple entre les variables Y et X.
+
+#Tests de comparaison de groupes :
+t.test(variable ~ groupe, data=data): Effectue un test t entre deux groupes.
+
+#Anova :
+anova(model): Effectue une analyse de variance (ANOVA) pour un modèle.
+
+#Tableaux croisés :
+table(variable1, variable2): Crée un tableau croisé entre deux variables.
+
+#Histogramme :
+hist(variable): Trace un histogramme pour visualiser la distribution d'une variable.
+
