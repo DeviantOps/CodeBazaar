@@ -1,0 +1,24 @@
+# (Utiliser le generateur Python/Pandas pour creer le .csv sur la propagation Electromagnetique
+
+# Soit un dataframe apelé 'data'
+# Sélectionner les colonnes pertinentes pour le clustering
+data_clustering <- data[, c("x", "y", "z", "E", "B")]
+
+# Normalisez les données (si nécessaire)
+data_scaled <- scale(data_clustering)
+
+# Appliquer l'algorithme K-means avec, par exemple, 3 clusters
+num_clusters <- 3
+kmeans_result <- kmeans(data_scaled, centers = num_clusters)
+
+# Ajouter les informations sur les clusters au dataframe d'origine
+data$cluster <- as.factor(kmeans_result$cluster)
+
+# Afficher les résultats
+print(table(data$cluster))
+
+# Adapter le nombre de clusters (num_clusters) en fonction de la structure sous-jacente des données. 
+# Autres méthodes de clustering 
+# hclust (clustering hiérarchique) 
+# dbscan (clustering basé sur la densité) en fonction de la nature des données
+
