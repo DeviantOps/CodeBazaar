@@ -1,0 +1,40 @@
+library(tm)
+# Créer un corpus à partir de fichiers texte
+corpus <- Corpus(DirSource("chemin_vers_les_fichiers_texte"))
+
+# Afficher les premiers documents du corpus
+inspect(corpus[1:5])
+
+# Prétraitement du texte :
+
+# Convertir le texte en minuscules
+corpus <- tm_map(corpus, content_transformer(tolower))
+
+# Supprimer la ponctuation
+corpus <- tm_map(corpus, removePunctuation)
+
+# Supprimer les chiffres
+corpus <- tm_map(corpus, removeNumbers)
+
+# Création d'une matrice document-term (DTM) :
+
+# Créer une matrice document-term
+dtm <- DocumentTermMatrix(corpus)
+
+# Extraction de termes fréquents :
+
+# Extraire les termes fréquents
+findFreqTerms(dtm, lowfreq = 10)
+
+# Analyse de la fréquence des termes :
+
+# Afficher la fréquence des termes
+termFreq <- row_sums(as.matrix(dtm))
+termFreq_df <- data.frame(term = names(termFreq), freq = termFreq)
+termFreq_df <- termFreq_df[order(-termFreq_df$freq), ]
+
+# Création de nuages de mots :
+
+library(wordcloud)
+# Créer un nuage de mots
+wordcloud(words = names(termFreq_df), freq = termFreq_df$freq, min.freq = 10)
