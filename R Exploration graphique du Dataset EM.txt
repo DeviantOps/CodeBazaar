@@ -1,3 +1,33 @@
+#
+# Base
+#
+
+# Charger le dataset (remplacez "chemin_vers_votre_fichier.csv" par le chemin correct)
+data <- read.csv("chemin_vers_votre_fichier.csv")
+
+# Afficher les premières lignes du dataset
+head(data)
+
+# Calculer des statistiques descriptives
+summary_stats <- summary(data)
+print(summary_stats)
+
+# Créer un histogramme pour l'intensité du champ E
+hist(data$E, main="Histogramme de l'intensité du champ E", xlab="Intensité du champ E", col="lightblue")
+
+# Créer une boîte à moustaches pour l'intensité du champ B
+boxplot(data$B, main="Boîte à moustaches de l'intensité du champ B", ylab="Intensité du champ B", col="lightgreen")
+
+# Créer un nuage de points pour la corrélation entre E et B
+plot(data$E, data$B, main="Nuage de points entre E et B", xlab="Intensité du champ E", ylab="Intensité du champ B", col="blue")
+
+# Ajouter une ligne de régression linéaire
+abline(lm(B ~ E, data=data), col="red")
+
+#
+# Avancé
+#
+
 # Installer la librairie 'rgl'
 # install.packages("rgl")
 
