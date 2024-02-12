@@ -1,0 +1,24 @@
+# R propose différentes méthodes pour imputer les valeurs manquantes dans vos données.
+# Une méthode courante est l'imputation par modèle
+# où on utilse un algorithme prédictif pour estimer les valeurs manquantes. 
+
+
+# Installer la librairie 'mice'
+# install.packages("mice")
+
+# Charger la librairie
+library(mice)
+
+# Sélectionner les colonnes pertinentes
+data_impute <- data[, c("E_x", "E_y", "E_z", "B_x", "B_y", "B_z")]
+
+# Appliquer l'imputation par modèle avec la méthode 'mice'
+imputed_data <- mice(data_impute, m = 5, method = "rf")
+
+# Compléter l'imputation
+imputed_data <- complete(imputed_data)
+
+# Dans cet exemple, la méthode rf utilise un algorithme de forêt aléatoire pour prédire les valeurs manquantes. 
+# On peut ajuster la méthode en fonction des besoins.
+# Après l'imputation, intégrer les valeurs imputées dans le dataframe d'origine. 
+# On peut le faire en utilisant la fonction cbind pour combiner les colonnes imputées avec le reste des données.
