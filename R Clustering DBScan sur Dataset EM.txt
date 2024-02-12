@@ -1,0 +1,24 @@
+# Soit un dataframe ppelé 'data'
+# E: Champ Electrique
+# B: Champ Magnetique
+# Supposons que les colonnes pour les vecteurs E et B sont "E_x", "E_y", "E_z", "B_x", "B_y", "B_z"
+
+# Sélectionner les colonnes pertinentes pour le clustering
+data_clustering <- data[, c("E_x", "E_y", "E_z", "B_x", "B_y", "B_z")]
+
+# Normaliser les données (si nécessaire)
+data_scaled <- scale(data_clustering)
+
+# Appliquer l'algorithme DBSCAN
+library(dbscan)
+dbscan_result <- dbscan(data_scaled, eps = 0.5, minPts = 5)
+
+# Ajouter les informations sur les clusters au dataframe d'origine
+data$cluster <- as.factor(dbscan_result$cluster)
+
+# Afficher les résultats
+print(table(data$cluster))
+
+# eps est la distance maximale entre deux échantillons pour qu'ils soient considérés dans le même cluster, 
+# minPts est le nombre minimum d'échantillons dans un cluster.
+# Ajuster les valeurs de eps et minPts en fonction de la densité et de la structure de vos données. 
