@@ -1,0 +1,39 @@
+# Création d'un vecteur de nombres de 1 à 5
+vecteur <- c(1, 2, 3, 4, 5)
+
+# Calcul de la moyenne d'un vecteur
+moyenne <- mean(vecteur)
+
+
+# Tracé d'un graphique à partir d'un vecteur
+plot(vecteur, main="Graphique simple", xlab="Valeurs X", ylab="Valeurs Y")
+
+
+# Lecture de données depuis un fichier CSV
+data <- read.csv("donnees.csv")
+
+
+# Affichage des statistiques descriptives d'un vecteur
+summary(vecteur)
+
+
+# Régression linéaire simple avec deux vecteurs
+regression <- lm(Y ~ X, data=data)
+
+
+# Définition d'une fonction personnalisée
+carre <- function(x) {
+  return(x^2)
+}
+
+
+# Filtrage des données basé sur une condition
+subset_data <- subset(data, condition)
+
+
+# Conversion de chaînes de caractères en objets de date
+date <- as.Date("2024-02-10")
+
+
+# Test t sur deux échantillons
+t.test(echantillon1, echantillon2)
