@@ -1,0 +1,28 @@
+# Charger la librairie 'e1071' pour SVM
+# install.packages("e1071")
+library(e1071)
+
+# Charger le dataset Iris
+data(iris)
+
+# Séparer le dataset en ensemble d'entraînement et de test
+set.seed(123)
+indice <- sample(2, nrow(iris), replace = TRUE, prob = c(0.7, 0.3))
+train_data <- iris[indice == 1, ]
+test_data <- iris[indice == 2, ]
+
+# Entraîner un modèle SVM
+svm_model <- svm(Species ~ ., data = train_data, kernel = "linear")
+
+# Prédire les classes sur l'ensemble de test
+predictions <- predict(svm_model, test_data)
+
+# Évaluer les performances du modèle
+confusion_matrix <- table(predictions, test_data$Species)
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+print(paste("Accuracy:", round(accuracy, 2)))
+
+# Dans cet exemple, nous utilisons un noyau linéaire (kernel = "linear"), 
+# mais on peut expérimenter avec d'autres noyaux comme "radial" ou "polynomial". 
+# L'ensemble de données Iris contient des mesures de longueur et de largeur des pétales 
+# et des sépales de trois espèces de fleurs.
