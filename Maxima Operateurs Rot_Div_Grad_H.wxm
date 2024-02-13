@@ -1,0 +1,20 @@
+/*Rotationnel*/
+load(vect);
+F: [F_x, F_y, F_z];
+cross(F, 'del);
+
+/*Divergence*/
+load(vect);
+F: [F_x(x, y, z), F_y(x, y, z), F_z(x, y, z)];
+'div(F, 'del);
+
+/*Gradient*/ 
+f: f(x, y, z);
+'grad(f, 'del);
+
+/*Hamiltonien*/
+hbar: 1; /* valeur arbitraire pour l'exemple */
+m: 1; /* valeur arbitraire pour l'exemple */
+V: V(x, y, z);
+-hbar^2/(2*m) * 'laplacian(f(x, y, z), 'del) + V;
+
