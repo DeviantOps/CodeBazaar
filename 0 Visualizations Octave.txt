@@ -1,0 +1,79 @@
+% Nuage de points (scatter plot)
+
+% Load data from file
+
+data = csvread('b.csv', 1, 0);
+
+ 
+
+% Plot feature 1 vs. feature 2
+
+scatter(data(:,1), data(:,2));
+
+xlabel('Feature 1');
+
+ylabel('Feature 2');
+
+title('Scatter plot');
+
+ 
+
+% HeatMap sur Matrice de Correlation
+
+% Load data from file
+
+data = csvread('b.csv', 1, 0);
+
+ 
+
+% Compute correlation matrix
+
+corr_matrix = corr(data);
+
+ 
+
+% Plot correlation matrix as heatmap
+
+heatmap(corr_matrix);
+
+title('Correlation matrix heatmap');
+
+ 
+
+%Box plot
+
+% Load data from file
+
+data = csvread('b.csv', 1, 0);
+
+ 
+
+% Plot box plot of feature 1
+
+boxplot(data(:,1));
+
+xlabel('Feature 1');
+
+title('Box plot');
+
+ 
+% Histogramme
+
+% Load data from file
+
+data = csvread('b.csv', 1, 0);
+
+
+% Plot histogram of feature 1
+
+figure;
+
+hist(data(:,1));
+
+xlabel('Feature 1');
+
+ylabel('Frequency');
+
+title('Histogram');
+
+ 
