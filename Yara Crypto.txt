@@ -1,0 +1,97 @@
+rule detect_RC4 {
+
+    meta:
+
+        description = "Detects the use of RC4 encryption in an executable"
+
+    strings:
+
+        $rc4 = {EB 04 5A EB F9}
+
+    condition:
+
+        $rc4 at 0
+
+}
+
+rule detect_AES {
+
+    meta:
+
+        description = "Detects the use of AES encryption in an executable"
+
+    strings:
+
+        $aes = { 0F 10 44 24 ?? 0F 11 44 24 ?? }
+
+    condition:
+
+        $aes
+
+}
+
+rule detect_XOR {
+
+    meta:
+
+        description = "Detects the use of XOR encryption in an executable"
+
+    strings:
+
+        $xor = { 80 ?? ?? ?? ?? ?? 33 ?? 81 ?? ?? ?? ?? ?? 31 }
+
+    condition:
+
+        $xor
+
+}
+ 
+rule detect_RSA {
+
+    meta:
+
+        description = "Detects the use of RSA encryption in an executable"
+
+    strings:
+
+        $rsa = { 48 89 E5 48 83 EC ?? 48 8D 45 ?? 48 89 75 ?? B8 }
+
+    condition:
+
+        $rsa
+
+}
+
+rule detect_ChaCha20 {
+
+    meta:
+
+        description = "Detects the use of ChaCha20 encryption in an executable"
+
+    strings:
+
+        $chacha20 = { 48 83 EC ?? 48 8B 44 24 ?? 48 8B 4C 24 ?? 8B D9 }
+
+    condition:
+
+        $chacha20
+
+}
+ 
+rule detect_Salsa20 {
+
+    meta:
+
+        description = "Detects the use of Salsa20 encryption in an executable"
+
+    strings:
+
+        $salsa20 = { 8B 44 24 ?? 85 C0 75 ?? 8B 4C 24 ?? 81 C1 }
+
+    condition:
+
+        $salsa20
+
+}
+
+ 
