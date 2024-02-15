@@ -1,0 +1,54 @@
+
+Moyenne : c'est la somme de toutes les valeurs d'un ensemble de données, divisée par le nombre total de données.
+
+ 
+
+Formule : moyenne = (somme des données) / (nombre de données)
+
+ 
+
+Médiane : c'est la valeur centrale d'un ensemble de données triées par ordre croissant ou décroissant.
+
+ 
+
+Formule : si le nombre de données est impair, la médiane est la valeur au milieu ; si le nombre de données est pair, la médiane est la moyenne des deux valeurs du milieu.
+
+ 
+
+Écart-type : c'est une mesure de la dispersion des données autour de la moyenne.
+
+ 
+
+Formule : écart-type = racine carrée de [ (somme des carrés des écarts à la moyenne) / (nombre de données - 1) ]
+
+ 
+
+Variance : c'est le carré de l'écart-type.
+
+ 
+
+Formule : variance = écart-type au carré
+
+ 
+
+Coefficient de corrélation : c'est une mesure de la force et de la direction de la relation entre deux variables.
+
+ 
+
+Formule : coefficient de corrélation = (somme des produits des écarts à la moyenne des deux variables) / (écart-type de la première variable x écart-type de la deuxième variable x nombre de données - 1)
+
+ 
+
+Distribution normale : c'est une distribution en forme de cloche qui est symétrique autour de la moyenne et où la majorité des données sont proches de la moyenne.
+
+ 
+
+Formule : aucune formule particulière, mais la distribution normale est souvent utilisée en statistiques pour modéliser les phénomènes naturels et les comportements humains.
+
+ 
+
+Test d'hypothèse : c'est une méthode statistique pour déterminer si une observation est statistiquement significative ou si elle peut être attribuée au hasard.
+
+ 
+
+Formule : il existe plusieurs formules pour différents tests d'hypothèse, mais la plupart impliquent des comparaisons entre des données observées et des valeurs attendues ou des moyennes. Les résultats sont généralement exprimés sous forme de valeur-p, qui représente la probabilité d'obtenir une observation aussi extrême ou plus extrême que celle observée, si l'hypothèse nulle (généralement l'hypothèse de hasard) est vraie.
