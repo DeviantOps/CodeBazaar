@@ -3,7 +3,7 @@
 $file_path = "C:\chemin\vers\fichier.txt"
 
 # Expression régulière pour filtrer les lignes
-$regex = "votre_expression_reguliere"
+$regex = "Glop-Glop"
 
 # Chemin d'accès pour le fichier de sortie
 $output_path = "C:\chemin\vers\fichier_sortie.txt"
