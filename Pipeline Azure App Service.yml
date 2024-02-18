@@ -1,0 +1,26 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: echo 'Build started'
+  displayName: 'Build'
+  
+- script: echo 'Run tests'
+  displayName: 'Test'
+  
+- script: echo 'Publish artifact'
+  displayName: 'Publish'
+  # Exemple pour un déploiement sur Azure App Service
+- task: AzureRmWebAppDeployment@4
+  displayName: 'Deploy to Azure App Service'
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Nom_de_votre_abonnement_Azure'
+    appType: 'webApp'
+    WebAppName: 'Nom_de_votre_application_Web'
+Configuration d'Azure App Service :
