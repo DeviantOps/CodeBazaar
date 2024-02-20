@@ -1,0 +1,34 @@
+- name: Provision Docker Container
+  hosts: your_host
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Install Docker Python library
+      pip:
+        name: docker
+
+    - name: Pull Docker image
+      docker_image:
+        name: your_image
+        source: pull
+
+    - name: Create Docker container
+      docker_container:
+        name: your_container
+        image: your_image
+        state: started
+        ports:
+          - "host_port:container_port"
+        volumes:
+          - "/host/path:/container/path"
+        env:
+          your_env_var: "value"
+
+    # Autres tâches pour configurer le conteneur (facultatif)
+    # ...
