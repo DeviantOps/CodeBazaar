@@ -1,0 +1,39 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Clone Git repository') {
+      steps {
+        git(
+          url: 'your_git_repository_url',
+          branch: 'your_git_branch'
+        )
+      }
+    }
+
+    stage('Build and Compile') {
+      steps {
+        // Ajoutez ici les étapes de compilation spécifiques à votre projet C
+        // Cela peut inclure l'exécution de commandes de compilation ou l'appel de scripts de build
+      }
+    }
+
+    stage('Generate Binaries') {
+      steps {
+        // Ajoutez ici les étapes pour générer les binaires à partir du code source compilé
+        // Assurez-vous de stocker les binaires générés dans un emplacement accessible
+      }
+    }
+
+    stage('Copy Binaries to Docker Container') {
+      steps {
+        // Ajoutez ici les étapes pour copier les binaires générés dans le conteneur Docker
+        // Vous pouvez utiliser la commande 'docker cp' ou monter un volume partagé
+      }
+    }
+
+    // Ajoutez d'autres étapes si nécessaire, comme les tests unitaires, les déploiements, etc.
+  }
+
+  // Ajoutez d'autres sections de configuration Jenkinsfile si nécessaire, comme l'environnement, les paramètres, les déclencheurs, etc.
+}
