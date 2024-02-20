@@ -1,3 +1,4 @@
+---
 - name: Install and configure GitLab
   hosts: debian_instance
   become: true
