@@ -1,3 +1,4 @@
+---
 - name: Provision Azure Container Instance
   hosts: localhost
   gather_facts: false
