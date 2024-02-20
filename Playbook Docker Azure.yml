@@ -1,0 +1,35 @@
+- name: Provision Azure Container Instance
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create Resource Group
+      azure_rm_resourcegroup:
+        name: your_resource_group
+        location: your_location
+        state: present
+
+    - name: Create Container Instance
+      azure_rm_containerinstance:
+        resource_group: your_resource_group
+        name: your_container_instance
+        location: your_location
+        image: your_image
+        registry_login_server: your_registry_login_server
+        registry_username: your_registry_username
+        registry_password: your_registry_password
+        environment_variables:
+          your_env_var: "value"
+        ports:
+          - protocol: TCP
+            port: container_port
+        volumes:
+          - name: your_volume
+            azure_file_volume:
+              share_name: your_share_name
+              storage_account_name: your_storage_account_name
+              storage_account_key: your_storage_account_key
+        state: present
+
+    # Autres tâches pour configurer le conteneur (facultatif)
+    # ...
