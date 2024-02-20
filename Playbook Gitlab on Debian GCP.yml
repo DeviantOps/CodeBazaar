@@ -1,0 +1,43 @@
+- name: Install and configure GitLab
+  hosts: debian_instance
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install required dependencies
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - openssh-server
+          - postfix
+        state: present
+
+    - name: Add GitLab package repository
+      apt_key:
+        url: https://packages.gitlab.com/gpg.key
+        state: present
+
+    - name: Add GitLab package repository (stretch-backports)
+      apt_repository:
+        repo: deb http://packages.gitlab.com/gitlab/gitlab-ce/debian/ stretch-backports main
+        state: present
+
+    - name: Install GitLab package
+      apt:
+        name: gitlab-ce
+        state: present
+
+    - name: Configure external_url for GitLab
+      lineinfile:
+        path: /etc/gitlab/gitlab.rb
+        regex: "^external_url"
+        line: "external_url 'http://your-gitlab-domain/'"
+        state: present
+
+    - name: Reconfigure GitLab
+      command: gitlab-ctl reconfigure
