@@ -1,0 +1,30 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Checkout') {
+      steps {
+        // Récupération du code source depuis GitLab
+        git 'https://gitlab.com/your-repo.git'
+      }
+    }
+
+    stage('Build') {
+      steps {
+        // Connexion SSH à la machine distante
+        sshagent(['your-ssh-credentials']) {
+          sh 'ssh user@your-machine-ip "cd /path/to/project && go build"'
+        }
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        // Connexion SSH à la machine distante
+        sshagent(['your-ssh-credentials']) {
+          sh 'ssh user@your-machine-ip "cd /path/to/project && ./your-app"'
+        }
+      }
+    }
+  }
+}
