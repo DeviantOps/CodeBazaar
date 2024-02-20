@@ -1,0 +1,30 @@
+---
+- name: Install Go
+  hosts: example-vm
+  become: true
+
+  tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - wget
+          - ca-certificates
+        state: present
+
+    - name: Download Go archive
+      get_url:
+        url: https://golang.org/dl/go1.16.7.linux-amd64.tar.gz
+        dest: /tmp/go.tar.gz
+
+    - name: Extract Go archive
+      unarchive:
+        src: /tmp/go.tar.gz
+        dest: /usr/local
+
+    - name: Set Go environment variables
+      lineinfile:
+        path: /etc/profile
+        line: |
+          export PATH=$PATH:/usr/local/go/bin
+          export GOPATH=$HOME/go
+          export PATH=$PATH:$GOPATH/bin
