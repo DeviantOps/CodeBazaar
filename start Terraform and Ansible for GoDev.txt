@@ -1,0 +1,18 @@
+*Terraform*
+Exécuter Terraform pour provisionner la machine virtuelle Azure :
+
+terraform init
+terraform apply
+Notez l'adresse IP publique de la machine virtuelle créée.
+
+*Ansible*
+Ajouter l'adresse IP de la machine virtuelle dans l'inventaire Ansible (inventory.ini), par exemple :
+
+[example-vm]
+10.0.0.4
+
+Exécuter Ansible pour installer Go sur la machine virtuelle :
+
+ansible-playbook -i inventory.ini go.yaml
+
+
