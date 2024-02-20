@@ -1,0 +1,121 @@
+opy code
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"  # Choisissez la box Vagrant appropriée pour votre projet
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "2048"  # Définissez la mémoire RAM allouée à la machine virtuelle
+  end
+
+  config.vm.network "forwarded_port", guest: 3000, host: 3000  # Redirection du port pour accéder à Gitea
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get update
+    sudo apt-get install -y git
+
+    # Installez Gitea à l'aide des instructions spécifiques à votre système d'exploitation
+    # Par exemple, pour Ubuntu, vous pouvez utiliser les commandes suivantes :
+    wget -O gitea https://dl.gitea.io/gitea/1.15.4/gitea-1.15.4-linux-amd64
+    chmod +x gitea
+    sudo mv gitea /usr/local/bin/
+
+    # Configurez et démarrez Gitea
+    sudo useradd --system --shell /bin/bash --comment 'Git Version Control' --user-group --home-dir /home/git git
+    sudo mkdir -p /var/lib/gitea/{custom,data,indexers,public,log}
+    sudo chown git:git /var/lib/gitea/{data,indexers,log}
+    sudo chmod 750 /var/lib/gitea/{data,indexers,log}
+    sudo mkdir /etc/gitea
+    sudo chown root:git /etc/gitea
+    sudo chmod 770 /etc/gitea
+
+    sudo cat > /etc/gitea/app.ini << EOF
+    [server]
+    DOMAIN           = localhost
+    HTTP_PORT        = 3000
+    ROOT_URL         = http://localhost:3000/
+    DB_TYPE          = sqlite3
+    DB_PATH          = /var/lib/gitea/data/gitea.db
+    SSH_DOMAIN       = localhost
+    SSH_PORT         = 22
+    SSH_LISTEN_PORT  = 2222
+    DISABLE_SSH      = false
+    OFFLINE_MODE     = false
+    [repository]
+    ROOT             = /var/lib/gitea/repositories
+    [mailer]
+    ENABLED          = false
+    [service]
+    REGISTER_EMAIL_CONFIRM            = false
+    ENABLE_NOTIFY_MAIL                = false
+    DISABLE_REGISTRATION              = false
+    REQUIRE_SIGNIN_VIEW               = false
+    ENABLE_REVERSE_PROXY_AUTHENTICATION = false
+    [openid]
+    ENABLE_OPENID_SIGNIN = false
+    [oauth2]
+    ENABLE_OAUTH2_SIGNIN = false
+    [log]
+    MODE             = console
+    [security]
+    INSTALL_LOCK     = true
+    SECRET_KEY       = secret
+    INTERNAL_TOKEN   = secret
+    [picture]
+    DISABLE_GRAVATAR        = false
+    [session]
+    PROVIDER                = file
+    PROVIDER_CONFIG         = /tmp/gitea-sessions
+    [database]
+    DB_TYPE          = sqlite3
+    PATH             = /var/lib/gitea/data/gitea.db
+    [session.database]
+    DB_TYPE          = sqlite3
+    PATH             = /var/lib/gitea/data/gitea.db
+    [session.memcache]
+    ADDR             = 127.0.0.1:11211
+    [session.redis]
+    ADDR             = 127.0.0.1:6379
+    [session.bolt]
+    PATH             = /tmp/gitea-sessions
+    [cache]
+    ADAPTER          = memory
+    INTERVAL         = 60
+    [markup]
+    FILE_EXTENSIONS = .md,.markdown,.mdown,.mkdn,.mkd,.mdwn,.mdtxt,.mdtext,.text
+    [markdown]
+    RENDERER        = github
+    [smtp]
+    ENABLED         = false
+    [ui]
+    DEFAULT_THEME   = arc-green
+    [openid]
+    ENABLE_OPENID_SIGNIN = false
+    [session]
+    PROVIDER        = file
+    PROVIDER_CONFIG = /tmp/gitea-sessions
+    [csrf]
+    COOKIE_NAME     = _csrf
+    COOKIE_SECURE   = false
+    COOKIE_HTTPONLY = false
+    [captcha]
+    TYPE            = builtin
+    SECRET_KEY      = secret
+    [log]
+    MODE            = console
+    [i18n]
+    LANG            = en-US
+    [indexer]
+    ISSUE_INDEXER_PATH   = /tmp/gitea/indexers/issues.bleve
+    REPO_INDEXER_PATH    = /tmp/gitea/indexers/repos.bleve
+    [attachment]
+    PATH            = /var/lib/gitea/attachments
+    [avatar]
+    PATH            = /var/lib/gitea/avatars
+    EOF
+
+    sudo chown root:git /etc/gitea/app.ini
+    sudo chmod 640 /etc/gitea/app.ini
+
+    sudo systemctl enable gitea
+    sudo systemctl start gitea
+  SHELL
+end
