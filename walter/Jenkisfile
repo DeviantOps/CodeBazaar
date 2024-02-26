@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Récupérer le code depuis le dépôt Gitea
+                git 'https://<votre-gitea>/votre-utilisateur/cve-search.git'
+            }
+        }
+        stage('Build and Deploy') {
+            steps {
+                // Exécuter les tâches de construction et de déploiement
+                sh 'terraform apply -auto-approve' // Appliquer les modifications d'infrastructure avec Terraform
+                sh 'ansible-playbook playbook.yml' // Exécuter le playbook Ansible pour configurer les services
+            }
+        }
+    }
+
+    post {
+        success {
+            // Notification en cas de succès
+            echo 'Mise à jour réussie'
+        }
+        failure {
+            // Notification en cas d'échec
+            echo 'Échec de la mise à jour'
+        }
+    }
+}
