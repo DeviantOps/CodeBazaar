@@ -1,0 +1,47 @@
+App.ini (fichier de configuration principal de Gitea) :
+
+[server]
+DOMAIN           = votre_domaine.com
+ROOT_URL         = https://votre_domaine.com
+
+Gitea service (fichier de service pour le démarrage automatique de Gitea au démarrage) :
+
+    [Unit]
+    Description=Gitea (Git with a cup of tea)
+    After=syslog.target
+    After=network.target
+    After=mysqld.service
+    After=postgresql.service
+    After=memcached.service
+    After=redis.service
+
+    [Service]
+    User=gitea
+    Group=gitea
+    RestartSec=2s
+    Type=simple
+    ExecStart=/path/to/gitea web
+    WorkingDirectory=/path/to/gitea
+    Restart=always
+    Environment=USER=gitea HOME=/home/gitea GITEA_WORK_DIR=/path/to/gitea
+    # If using Unix socket: ExecStart=/path/to/gitea web -c /path/to/app.ini
+    # If using TCP socket: ExecStart=/path/to/gitea web -c /path/to/app.ini --socket /path/to/gitea/gitea.sock --pid /run/gitea/gitea.pid
+    CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+    AmbientCapabilities=CAP_NET_BIND_SERVICE
+    ExecStartPre=/bin/bash -c 'setcap cap_net_bind_service=+ep /path/to/gitea/gitea'
+    LimitNOFILE=65535
+    Restart=on-failure
+
+    [Install]
+    WantedBy=multi-user.target
+
+Commandes CLI Tea pour Gitea :
+
+Créer un nouveau dépôt :
+
+tea repo create <nom_dépôt>
+
+Cloner un dépôt existant :
+
+    tea clone <URL_dépôt>
+
