@@ -1,0 +1,11 @@
+---
+        - hosts: walter.lan.home
+          become: true
+          tasks:
+            - name: Installation de Docker
+              # Commandes ou rôles Ansible pour installer Docker
+            - name: Installation de MongoDB
+              # Commandes ou rôles Ansible pour installer MongoDB
+            - name: Installation de Redis
+              # Commandes ou rôles Ansible pour installer Redis
+            # Autres tâches de configuration et de déploiement
