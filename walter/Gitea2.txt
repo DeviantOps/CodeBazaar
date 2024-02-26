@@ -1,0 +1,39 @@
+Dans le cas ou ne definit pas le Pipeline sur Jenkis
+
+main.yml
+
+    on:
+      push:
+        branches:
+          - main
+
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v2
+
+          - name: Set up Python
+            uses: actions/setup-python@v2
+            with:
+              python-version: '3.x'
+
+          - name: Install dependencies
+            run: |
+              pip install -r requirements.txt
+
+          - name: Run tests
+            run: |
+              python run_tests.py
+
+      deploy:
+        runs-on: ubuntu-latest
+
+        needs: build
+
+        steps:
+          - name: Deploy to K3s
+            run: |
+              kubectl apply -f deployment.yaml
