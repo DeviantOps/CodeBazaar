@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+  jupyter:
+    image: jupyter/datascience-notebook
+    ports:
+      - "9898:8888"
+      - "22222:22"
+    volumes:
+      - notebook-data:/home/jovyan/work
+      - ssh-keys:/home/jovyan/.ssh
+    environment:
+      - NB_UID=1000
+      - NB_GID=100
+    command: start-notebook.sh --NotebookApp.token=''
+  
+  keras_autokeras:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - jupyter
+    volumes:
+      - notebook-data:/home/jovyan/work
+    environment:
+      - NB_UID=1000
+      - NB_GID=100
+      - JUPYTER_TOKEN=  # Ajouter un token si nécessaire
+      - KERAS_BACKEND=tensorflow
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - "/dev/fuse:/dev/fuse"
+    tty: true
+
+volumes:
+  notebook-data:
+  ssh-keys:
