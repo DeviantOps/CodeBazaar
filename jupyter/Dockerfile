@@ -1,5 +1,5 @@
 FROM jupyter/datascience-notebook
-RUN pip install keras autokeras
+RUN pip install keras autokeras nltk
 FROM ubuntu:latest
 RUN useradd -ms /bin/bash xubuntu
 RUN echo 'xubuntu:xubuntu' | chpasswd
