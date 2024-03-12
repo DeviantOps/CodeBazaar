@@ -35,4 +35,15 @@ services:
 
 volumes:
   notebook-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/unbekannt/lab/ext3/notebooks
   ssh-keys:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/unbekannt/lab/ext3/ssh
+
