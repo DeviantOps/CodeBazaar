@@ -1,7 +1,9 @@
-LOAD CSV FROM "http://192.168.1.10/Inventory-FR.csv" AS line
-CREATE (:Host {ip: line[0], hostname: line[1], ftp: line[2],http: line[5], https: line[8],frontend: line[18],kibana: line[23],elk: line[31],vulns: line[36]})
+LOAD CSV WITH HEADERS FROM 'http://192.168.1.50/carto-FR-dashboards2.csv' AS row
+MATCH (machine:Machine {adresse_ip: row.IP})
 
-MATCH (h1:Host {elk: "1"}),(h2:Host {elk: "1"})
-CREATE (h1)-[:HAS_ELK]->(h2)
+UNWIND keys(row)[2..] AS service
 
-MATCH p=()-[r:HAS_ELK]->() RETURN p LIMIT 25
+WITH machine, service, row[service] AS statut
+WHERE statut = "1"
+MATCH (serviceNode:Service {nom: service})
+MERGE (machine)-[:EXPOSE]->(serviceNode)
